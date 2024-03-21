@@ -17,6 +17,11 @@ export class ChangeAction {
    */
   filePath: string[];
 
+  /**
+   * Contains the destination filepath, in case of a move
+   */
+  destinationFilePath: string[];
+
   toString() {
     return `[${this.elementType}] - [${this.changeType}] - /${this.filePath.join('/')}`;
   }

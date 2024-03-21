@@ -10,12 +10,14 @@ import {ChangeExecutorExecutionStatusInterface} from '../interfaces/change-execu
 import {mkdirSync} from 'fs';
 import {ExecutionStatusEnum} from '../enums/execution-status.enum';
 import {tag} from '@pristine-ts/common';
+import {writeFile} from 'fs/promises';
+import * as crypto from 'crypto';
 
 @tag("ChangeExecutorInterface")
 @injectable()
-export class DirectoryCreateChangeExecutor implements ChangeExecutorInterface {
+export class FileCreateChangeExecutor implements ChangeExecutorInterface {
   supports(changeAction: ChangeAction): boolean {
-    return changeAction.elementType === ElementTypeEnum.Directory && changeAction.changeType === ChangeTypeEnum.CREATE && changeAction.filePath.length !== 0;
+    return changeAction.elementType === ElementTypeEnum.File && changeAction.changeType === ChangeTypeEnum.CREATE && changeAction.filePath.length !== 0;
   }
 
   async isExecutable(baseDirectory: string, changeAction: ChangeAction): Promise<ChangeExecutorIsExecutableInterface> {
@@ -25,23 +27,26 @@ export class DirectoryCreateChangeExecutor implements ChangeExecutorInterface {
 
     if(exists) {
       return {
-        message: `The last directory at path '${path}' already exists. Can't execute this change.`,
+        message: `The file at path '${path}' already exists. Can't execute this change.`,
         isExecutable: false,
       }
     }
 
     return {
       isExecutable: true,
-      message: `Directory '${path}' can be created.`,
+      message: `File '${path}' can be created.`,
     };
   }
 
   async execute(baseDirectory: string, changeAction: ChangeAction): Promise<ChangeExecutorExecutionStatusInterface> {
+    const surroundingDirectory = join(baseDirectory, ...changeAction.filePath.slice(0, -1));
     const path = join(baseDirectory, ...changeAction.filePath);
 
-    mkdirSync(path, {
-      recursive: true,
-    });
+    if(existsSync(surroundingDirectory) === false) {
+      mkdirSync(surroundingDirectory, {recursive: true})
+    }
+
+    await writeFile(path, crypto.randomBytes(150).toString('hex'), "utf-8");
 
     return {
       status: ExecutionStatusEnum.Success,

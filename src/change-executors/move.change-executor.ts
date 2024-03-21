@@ -10,38 +10,48 @@ import {ChangeExecutorExecutionStatusInterface} from '../interfaces/change-execu
 import {mkdirSync} from 'fs';
 import {ExecutionStatusEnum} from '../enums/execution-status.enum';
 import {tag} from '@pristine-ts/common';
+import {rename, writeFile} from 'fs/promises';
+import * as crypto from 'crypto';
 
 @tag("ChangeExecutorInterface")
 @injectable()
-export class DirectoryCreateChangeExecutor implements ChangeExecutorInterface {
+export class MoveChangeExecutor implements ChangeExecutorInterface {
   supports(changeAction: ChangeAction): boolean {
-    return changeAction.elementType === ElementTypeEnum.Directory && changeAction.changeType === ChangeTypeEnum.CREATE && changeAction.filePath.length !== 0;
+    return (changeAction.elementType === ElementTypeEnum.File || changeAction.elementType === ElementTypeEnum.Directory) && changeAction.changeType === ChangeTypeEnum.MOVE && changeAction.filePath.length !== 0;
   }
 
   async isExecutable(baseDirectory: string, changeAction: ChangeAction): Promise<ChangeExecutorIsExecutableInterface> {
-    // If the final directory already exists, we can't execute this change.
+    // If the final file|directory already exists, we can't execute this change.
     const path = join(baseDirectory, ...changeAction.filePath);
+    const destinationFilePath = join(baseDirectory, ...changeAction.destinationFilePath);
     const exists = existsSync(path);
+    const destinationExists = existsSync(path);
 
-    if(exists) {
+    if(!exists) {
       return {
-        message: `The last directory at path '${path}' already exists. Can't execute this change.`,
+        message: `Cannot move file|directory '${path}' since it doesn't exist.`,
+        isExecutable: false,
+      }
+    }
+
+    if(destinationExists) {
+      return {
+        message: `Cannot move file|directory '${path}' to '${destinationFilePath}' since there's already a file|directory there.`,
         isExecutable: false,
       }
     }
 
     return {
       isExecutable: true,
-      message: `Directory '${path}' can be created.`,
+      message: `File|Directory '${path}' can be moved.`,
     };
   }
 
   async execute(baseDirectory: string, changeAction: ChangeAction): Promise<ChangeExecutorExecutionStatusInterface> {
     const path = join(baseDirectory, ...changeAction.filePath);
+    const destinationPath = join(baseDirectory, ...changeAction.destinationFilePath);
 
-    mkdirSync(path, {
-      recursive: true,
-    });
+    await rename(path, destinationPath);
 
     return {
       status: ExecutionStatusEnum.Success,

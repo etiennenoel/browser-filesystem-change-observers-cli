@@ -130,6 +130,7 @@ export class FileNameGenerator {
         const isFamily = previousPathParts.indexOf("family") !== -1;
         const isPets = previousPathParts.indexOf("pets") !== -1;
         const isPictures = previousPathParts.indexOf("pictures") !== -1;
+        const isDocuments = previousPathParts.indexOf("documents") !== -1;
 
         let possibleFilenames: string[] = [];
 
@@ -144,12 +145,24 @@ export class FileNameGenerator {
         }
 
         if (possibleFilenames.length === 0) {
-            possibleFilenames = [
-                ...this.firstNames,
-                ...this.countries,
-                ...this.animals,
-                ...this.petNames,
-            ];
+            if(isPictures) {
+                possibleFilenames = [
+                    "profile_picture",
+                    "background",
+                ];
+            } else if(isDocuments) {
+                possibleFilenames = [
+                    "agenda",
+                    "schedule",
+                    "meeting_notes",
+                ];
+            } else {
+                possibleFilenames = [
+                    "2024-03-02_log",
+                    "backup",
+                ];
+            }
+
         }
 
         // Randomly select a file name

@@ -8,11 +8,19 @@ import {FileNameGenerator} from './generators/file-name.generator';
 import {PathGenerator} from './generators/path.generator';
 import {ChangeTypeGenerator} from './generators/change-type.generator';
 import {DirectoryCreateChangeExecutor} from './change-executors/directory-create.change-executor';
+import {FileCreateChangeExecutor} from './change-executors/file-create.change-executor';
+import {MoveChangeExecutor} from './change-executors/move.change-executor';
+import {FileDeleteChangeExecutor} from './change-executors/file-delete.change-executor';
+import {FileModifyChangeExecutor} from './change-executors/file-modify.change-executor';
 
 export const AppModule: AppModuleInterface = {
   importServices: [
     // Change Executors
     DirectoryCreateChangeExecutor,
+    FileCreateChangeExecutor,
+    FileDeleteChangeExecutor,
+    FileModifyChangeExecutor,
+    MoveChangeExecutor,
 
     // Commands
     RunCommand,

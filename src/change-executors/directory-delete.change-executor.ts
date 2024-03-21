@@ -10,12 +10,14 @@ import {ChangeExecutorExecutionStatusInterface} from '../interfaces/change-execu
 import {mkdirSync} from 'fs';
 import {ExecutionStatusEnum} from '../enums/execution-status.enum';
 import {tag} from '@pristine-ts/common';
+import {rm, unlink} from 'fs/promises';
 
 @tag("ChangeExecutorInterface")
 @injectable()
-export class DirectoryCreateChangeExecutor implements ChangeExecutorInterface {
+export class DirectoryDeleteChangeExecutor implements ChangeExecutorInterface {
+
   supports(changeAction: ChangeAction): boolean {
-    return changeAction.elementType === ElementTypeEnum.Directory && changeAction.changeType === ChangeTypeEnum.CREATE && changeAction.filePath.length !== 0;
+    return changeAction.elementType === ElementTypeEnum.Directory && changeAction.changeType === ChangeTypeEnum.DELETE && changeAction.filePath.length !== 0;
   }
 
   async isExecutable(baseDirectory: string, changeAction: ChangeAction): Promise<ChangeExecutorIsExecutableInterface> {
@@ -23,25 +25,25 @@ export class DirectoryCreateChangeExecutor implements ChangeExecutorInterface {
     const path = join(baseDirectory, ...changeAction.filePath);
     const exists = existsSync(path);
 
-    if(exists) {
+    if(!exists) {
       return {
-        message: `The last directory at path '${path}' already exists. Can't execute this change.`,
+        message: `The directory at path '${path}' doesn't exists. Can't execute this change.`,
         isExecutable: false,
       }
     }
 
     return {
       isExecutable: true,
-      message: `Directory '${path}' can be created.`,
+      message: `Directory '${path}' can be deleted.`,
     };
   }
 
   async execute(baseDirectory: string, changeAction: ChangeAction): Promise<ChangeExecutorExecutionStatusInterface> {
     const path = join(baseDirectory, ...changeAction.filePath);
 
-    mkdirSync(path, {
+    await rm(path, {
       recursive: true,
-    });
+    })
 
     return {
       status: ExecutionStatusEnum.Success,

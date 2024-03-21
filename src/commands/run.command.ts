@@ -8,6 +8,7 @@ import {DirectoryNameGenerator} from '../generators/directory-name.generator';
 import {PathGenerator} from '../generators/path.generator';
 import {randomInt} from 'crypto';
 import {ChangeActionGenerator} from '../generators/change-action.generator';
+import {FileChangeManager} from '../managers/file-change.manager';
 
 @tag(ServiceDefinitionTagEnum.Command)
 @injectable()
@@ -17,7 +18,7 @@ export class RunCommand implements CommandInterface<RunCommandOptions> {
 
   constructor(private readonly consoleManager: ConsoleManager,
               private readonly directoryManager: DirectoryManager,
-              private readonly changeActionGenerator: ChangeActionGenerator,
+              private readonly fileChangeManager: FileChangeManager,
   ) {
   }
 
@@ -31,7 +32,7 @@ export class RunCommand implements CommandInterface<RunCommandOptions> {
 
     this.consoleManager.writeLine(`Directory Path: '${rootDirectoryPath}' [${rootDirectoryPathExists ? 'EXISTS' : 'NOT FOUND'}]`)
 
-    if(!rootDirectoryPathExists) {
+    if (!rootDirectoryPathExists) {
       this.consoleManager.writeLine(`The directory path '${rootDirectoryPath}' doesn't exist. Aborting`)
       return ExitCodeEnum.Error
     }
@@ -40,11 +41,27 @@ export class RunCommand implements CommandInterface<RunCommandOptions> {
 
     this.consoleManager.writeLine("")
 
-    await this.consoleManager.readLine("Press the 'enter' key to generate a change.")
+    if (args.continuous) {
+      return new Promise((resolve, reject) => {
+        let numberOfExecutions = 0;
 
-    const changeAction = this.changeActionGenerator.generate();
+        const interval = setInterval(() => {
+          if(args.stopAfterXIterations && numberOfExecutions >= args.stopAfterXIterations) {
+            return resolve(ExitCodeEnum.Success);
+          }
 
-    this.consoleManager.writeLine(changeAction.toString());
+          numberOfExecutions++;
+        }, args.interval)
+      });
+    } else {
+      do {
+        await this.consoleManager.readLine("Press the 'enter' key to generate a change. Press 'ctrl-c' to exit.")
+        const changeAction = await this.fileChangeManager.generate(args);
+
+        this.consoleManager.writeLine(changeAction.toString());
+      } while (true)
+
+    }
 
     return Promise.resolve(ExitCodeEnum.Success);
   }
