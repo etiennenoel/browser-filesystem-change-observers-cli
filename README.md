@@ -6,7 +6,9 @@ human-friendly filenames so that it's easy to identify the changes. It uses coun
 first names, animals and pet names.
 
 ## Setup
-Checkout this repository and at the root, run `npm install`. Make sure you have node installed for your computer.
+1- Clone this repository
+2- At the root, run `npm install`. Make sure you have node installed for your computer.
+3- Run `npm build`
 
 ## Base Directory
 This tool requires a Base Directory where it will do changes. Ideally, it should be empty but it doesn't have to be.
