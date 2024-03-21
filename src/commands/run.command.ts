@@ -30,7 +30,7 @@ export class RunCommand implements CommandInterface<RunCommandOptions> {
 
     this.consoleManager.writeLine(`Directory Path: '${rootDirectoryPath}' [${rootDirectoryPathExists ? 'EXISTS' : 'NOT FOUND'}]`)
 
-    if(rootDirectoryPathExists === false) {
+    if(!rootDirectoryPathExists) {
       this.consoleManager.writeLine(`The directory path '${rootDirectoryPath}' doesn't exist. Aborting`)
       return ExitCodeEnum.Error
     }
