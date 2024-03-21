@@ -37,8 +37,9 @@ export class RunCommand implements CommandInterface<RunCommandOptions> {
       return ExitCodeEnum.Error
     }
 
-    this.consoleManager.writeLine(`Continuous: ${args.continuous}`)
+
     if(args.continuous) {
+      this.consoleManager.writeLine(`Continuous: ${args.continuous}`)
       this.consoleManager.writeLine(`Interval: ${args.interval}`)
       this.consoleManager.writeLine(`Stop After X Iterations: ${args.stopAfterXIterations}`)
     }
