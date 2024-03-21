@@ -10,7 +10,8 @@
     "build": "tsc -p tsconfig.json && tsc -p tsconfig.cjs.json",
     "build:esm": "tsc -p tsconfig.json",
     "build:cjs": "tsc -p tsconfig.cjs.json",
-    "run": "pristine run --rootDirectoryPath=/private/tmp/filesystem-change-observers-cli"
+    "generate-changes-automatically": "pristine run --rootDirectoryPath=/private/tmp/filesystem-change-observers-cli --continuous --stopAfterXIterations=4 --interval=1000",
+    "generate-changes-manually": "pristine run --rootDirectoryPath=/private/tmp/filesystem-change-observers-cli"
   },
   "dependencies": {
     "@pristine-ts/class-validator": "1.0.25",

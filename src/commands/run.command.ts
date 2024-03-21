@@ -37,6 +37,13 @@ export class RunCommand implements CommandInterface<RunCommandOptions> {
       return ExitCodeEnum.Error
     }
 
+    this.consoleManager.writeLine(`Continuous: ${args.continuous}`)
+    if(args.continuous) {
+      this.consoleManager.writeLine(`Interval: ${args.interval}`)
+      this.consoleManager.writeLine(`Stop After X Iterations: ${args.stopAfterXIterations}`)
+    }
+
+
     // Generate a random directory name
 
     this.consoleManager.writeLine("")
@@ -45,11 +52,13 @@ export class RunCommand implements CommandInterface<RunCommandOptions> {
       return new Promise((resolve, reject) => {
         let numberOfExecutions = 0;
 
-        const interval = setInterval(() => {
+        const interval = setInterval(async () => {
           if(args.stopAfterXIterations && numberOfExecutions >= args.stopAfterXIterations) {
             return resolve(ExitCodeEnum.Success);
           }
+          const changeAction = await this.fileChangeManager.generate(args);
 
+          this.consoleManager.writeLine(changeAction.toString());
           numberOfExecutions++;
         }, args.interval)
       });
