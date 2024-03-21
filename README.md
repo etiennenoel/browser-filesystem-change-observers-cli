@@ -1,8 +1,41 @@
- - [X] Define the list of enums that correspond to all the possible changes
- - [] Generate the change executors 
- - [] Have the manager generate actions that are "possible". For example, you can't modify a file that doesn't exist. There should be some action executor that are responsible to decide if an action is actually possible to be executed. If not, then the action executor should return that the action cannot be executed and another one will be genreated. We brute force for now.
+Browser Filesystem Change Observers CLI
+===========================
+
+This project will create changes for you inside a directory. This CLI uses
+human-friendly filenames so that it's easy to identify the changes. It uses countries, 
+first names, animals and pet names.
+
+## Setup
+Checkout this repository and at the root, run `npm install`. Make sure you have node installed for your computer.
+
+## Base Directory
+This tool requires a Base Directory where it will do changes. Ideally, it should be empty but it doesn't have to be.
+
+This parameter is set via `--rootDirectoryPath`. You can go to `package.json` and change the parameter there.
+
+## Continuous mode
+In the continuous mode (`--continuous`), the CLI will constantly be generating changes. You specify
+the `--interval` and `--stopAfterXIterations(optional)`  values to control the 
+frequency and when it should stop.
+
+To run it, just run:
+
+`npm run generate-changes-continuously`
+
+To change the parameters mentioned above, go to `package.json` and change the parameters there.
+
+## Manual mode
+In the manual mode, the CLI stays active and you must press 'enter' to generate a new change.
+
+To run it, just run:
+
+`npm run generate-changes-manually`
+
+
+
+## TODOS
+
  - [] Support building scenarios of specific action
    - [] Scenarios are simply a list of change actions to be executed in order. The executed actions will be stored in a scenario file by datetime so they can be replayed.
    - [] There should be a configuration option that accepts a json file to replay scenarios
- - [X] The generator should return an "action" object that specifies what action should be done
- - [] Support executing actions with different mecanisms than just Node's version of it. For example, using the command `mkdir` versus `md`. There should be an option to `useOsSpecificCommandsForActions`
+ - [] Support executing actions with different mechanisms than just Node's version of it. For example, using the command `mkdir` versus `md`. There should be an option to `useOsSpecificCommandsForActions`
