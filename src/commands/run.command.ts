@@ -39,8 +39,10 @@ export class RunCommand implements CommandInterface<RunCommandOptions> {
 
     this.consoleManager.writeLine("")
 
-    await this.consoleManager.readLine("Press the 'enter' key to generate a change.", {showCharactersOnTyping: false})
+    await this.consoleManager.readLine("Press the 'enter' key to generate a change.")
+
     this.consoleManager.writeLine(this.pathGenerator.generate(randomInt(1, 4)));
+
 
     return Promise.resolve(ExitCodeEnum.Success);
   }

@@ -5,49 +5,36 @@ import {randomInt} from 'crypto';
 
 @injectable()
 export class FileNameGenerator {
-  constructor(private readonly directoryManager: DirectoryManager, private readonly fileManager: FileManager) {
-  }
+    animals = [
+        "aardvark",
+        "bear",
+        "camel",
+        "dolphin",
+        "elephant",
+        "fox",
+        "gorilla",
+        "hippopotamus",
+        "impala",
+        "jaguar",
+        "kangaroo",
+        "lion",
+        "monkey",
+        "narwhal",
+        "octopus",
+        "panda",
+        "quail",
+        "rabbit",
+        "snake",
+        "tiger",
+        "urial",
+        "vulture",
+        "wolf",
+        "x-Ray",
+        "yak",
+        "zebra",
+    ];
 
-  generate(previousPathParts: string[] = []) {
-    const isAnimal = previousPathParts.indexOf("animals") !== -1;
-    const isCountry = previousPathParts.indexOf("countries") !== -1;
-    const isFamily = previousPathParts.indexOf("family") !== -1;
-    const isPets = previousPathParts.indexOf("isPets") !== -1;
-
-    let possibleFilenames: string[] = [];
-
-    if (isAnimal) {
-      possibleFilenames = [
-        "aardvark.txt",
-        "bear.txt",
-        "camel.txt",
-        "dolphin.txt",
-        "elephant.txt",
-        "fox.txt",
-        "gorilla.txt",
-        "hippopotamus.txt",
-        "impala.txt",
-        "jaguar.txt",
-        "kangaroo.txt",
-        "lion.txt",
-        "monkey.txt",
-        "narwhal.txt",
-        "octopus.txt",
-        "panda.txt",
-        "quail.txt",
-        "rabbit.txt",
-        "snake.txt",
-        "tiger.txt",
-        "urial.txt",
-        "vulture.txt",
-        "wolf.txt",
-        "x-Ray.txt",
-        "yak.txt",
-        "zebra.txt",
-      ];
-    }
-    else if (isCountry) {
-      possibleFilenames = [
+    countries = [
         "afghanistan",
         "brazil",
         "canada",
@@ -74,10 +61,9 @@ export class FileNameGenerator {
         "xenia",
         "yemen",
         "zambia",
-      ];
-    }
-    else if (isFamily) {
-      possibleFilenames = [
+    ]
+
+    firstNames = [
         "adam",
         "benjamin",
         "charlotte",
@@ -104,10 +90,9 @@ export class FileNameGenerator {
         "xavier",
         "yasmin",
         "zachary",
-      ]
-    }
-    else if (isPets) {
-      possibleFilenames = [
+    ];
+
+    petNames = [
         "abby",
         "buddy",
         "coco",
@@ -134,16 +119,50 @@ export class FileNameGenerator {
         "xena",
         "yoshi",
         "zeus",
-      ]
+    ];
+
+    constructor(private readonly directoryManager: DirectoryManager, private readonly fileManager: FileManager) {
     }
 
-    if(possibleFilenames.length === 0) {
-      return randomBytes(20).toString('hex');;
+    generate(previousPathParts: string[] = []) {
+        const isAnimal = previousPathParts.indexOf("animals") !== -1;
+        const isCountry = previousPathParts.indexOf("countries") !== -1;
+        const isFamily = previousPathParts.indexOf("family") !== -1;
+        const isPets = previousPathParts.indexOf("pets") !== -1;
+        const isPictures = previousPathParts.indexOf("pictures") !== -1;
+
+        let possibleFilenames: string[] = [];
+
+        if (isAnimal) {
+            possibleFilenames = this.animals;
+        } else if (isCountry) {
+            possibleFilenames = this.countries;
+        } else if (isFamily) {
+            possibleFilenames = this.firstNames;
+        } else if (isPets) {
+            possibleFilenames = this.petNames;
+        }
+
+        if (possibleFilenames.length === 0) {
+            possibleFilenames = [
+                ...this.firstNames,
+                ...this.countries,
+                ...this.animals,
+                ...this.petNames,
+            ];
+        }
+
+        // Randomly select a file name
+        const randomNumber = randomInt(0, possibleFilenames.length);
+
+        let filename = possibleFilenames[randomNumber];
+
+        if (isPictures) {
+            filename += ".jpg";
+        } else {
+            filename += ".txt";
+        }
+
+        return filename;
     }
-
-    // Randomly select a file name
-    const randomNumber = randomInt(0, possibleFilenames.length);
-
-    return possibleFilenames[randomNumber];
-  }
 }

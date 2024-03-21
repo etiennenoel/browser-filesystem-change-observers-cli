@@ -2,6 +2,7 @@ import {injectable} from 'tsyringe';
 import {FileNameGenerator} from './file-name.generator';
 import {DirectoryNameGenerator} from './directory-name.generator';
 import {ElementTypeEnum} from '../enums/element-type.enum';
+import {randomInt} from "crypto";
 
 @injectable()
 export class PathGenerator {
@@ -14,7 +15,7 @@ export class PathGenerator {
   generate(nestingLevels: number): string {
     const pathParts: string[] = [];
 
-    const randomizedNumber = Math.random();
+    const randomizedNumber = randomInt(0, 2);
 
     const elementType: ElementTypeEnum = randomizedNumber === 0 ? ElementTypeEnum.Directory : ElementTypeEnum.File;
 
