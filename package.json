@@ -7,24 +7,26 @@
   "license": "UNLICENSED",
   "scripts": {
     "prebuild": "rm -rf dist",
-    "build": "tsc -p tsconfig.json && tsc -p tsconfig.cjs.json && ttsc -p tsconfig.angular.json",
+    "build": "tsc -p tsconfig.json && tsc -p tsconfig.cjs.json",
     "build:esm": "tsc -p tsconfig.json",
-    "build:cjs": "tsc -p tsconfig.cjs.json"
+    "build:cjs": "tsc -p tsconfig.cjs.json",
+    "run": "pristine run --rootDirectoryPath=/private/tmp/filesystem-change-observers-cli"
   },
   "dependencies": {
     "@pristine-ts/class-validator": "1.0.25",
-    "@pristine-ts/common": "^0.0.317",
-    "@pristine-ts/configuration": "^0.0.317",
-    "@pristine-ts/cli": "^0.0.317",
-    "@pristine-ts/core": "^0.0.317",
-    "@pristine-ts/http": "^0.0.317",
-    "@pristine-ts/file": "^0.0.317",
-    "@pristine-ts/logging": "^0.0.317",
-    "@pristine-ts/networking": "^0.0.317",
-    "@pristine-ts/telemetry": "^0.0.317",
-    "@pristine-ts/validation": "^0.0.317",
+    "@pristine-ts/common": "^0.0.319",
+    "@pristine-ts/configuration": "^0.0.319",
+    "@pristine-ts/cli": "^0.0.319",
+    "@pristine-ts/core": "^0.0.319",
+    "@pristine-ts/http": "^0.0.319",
+    "@pristine-ts/file": "^0.0.319",
+    "@pristine-ts/logging": "^0.0.319",
+    "@pristine-ts/networking": "^0.0.319",
+    "@pristine-ts/telemetry": "^0.0.319",
+    "@pristine-ts/validation": "^0.0.319",
     "date-fns": "^3.6.0",
     "reflect-metadata": "^0.2.1",
+    "tsyringe": "4.8.0",
     "uuid": "^9.0.1"
   },
   "devDependencies": {
@@ -34,6 +36,11 @@
     "ts-jest": "^29.1.2",
     "ts-node": "^10.9.2",
     "typescript": "^5.4.2"
+  },
+  "pristine": {
+    "appModule": {
+      "cjsPath": "dist/cjs/app.module.js"
+    }
   },
   "jest": {
     "transform": {
