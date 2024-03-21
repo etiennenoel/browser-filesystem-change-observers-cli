@@ -7,6 +7,7 @@ import {FileNameGenerator} from '../generators/file-name.generator';
 import {DirectoryNameGenerator} from '../generators/directory-name.generator';
 import {PathGenerator} from '../generators/path.generator';
 import {randomInt} from 'crypto';
+import {ChangeActionGenerator} from '../generators/change-action.generator';
 
 @tag(ServiceDefinitionTagEnum.Command)
 @injectable()
@@ -16,7 +17,7 @@ export class RunCommand implements CommandInterface<RunCommandOptions> {
 
   constructor(private readonly consoleManager: ConsoleManager,
               private readonly directoryManager: DirectoryManager,
-              private readonly pathGenerator: PathGenerator,
+              private readonly changeActionGenerator: ChangeActionGenerator,
   ) {
   }
 
@@ -41,8 +42,9 @@ export class RunCommand implements CommandInterface<RunCommandOptions> {
 
     await this.consoleManager.readLine("Press the 'enter' key to generate a change.")
 
-    this.consoleManager.writeLine(this.pathGenerator.generate(randomInt(1, 4)));
+    const changeAction = this.changeActionGenerator.generate();
 
+    this.consoleManager.writeLine(changeAction.toString());
 
     return Promise.resolve(ExitCodeEnum.Success);
   }

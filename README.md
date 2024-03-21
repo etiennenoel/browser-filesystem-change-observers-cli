@@ -1,4 +1,8 @@
-[] Define the list of enums that correspond to all the possible changes
-[] Define the list of file names as enums
-[] Support building scenarios of specific action
-[] The generator should return an "action" object that specifies what action should be done
+ - [X] Define the list of enums that correspond to all the possible changes
+ - [] Generate the change executors 
+ - [] Have the manager generate actions that are "possible". For example, you can't modify a file that doesn't exist. There should be some action executor that are responsible to decide if an action is actually possible to be executed. If not, then the action executor should return that the action cannot be executed and another one will be genreated. We brute force for now.
+ - [] Support building scenarios of specific action
+   - [] Scenarios are simply a list of change actions to be executed in order. The executed actions will be stored in a scenario file by datetime so they can be replayed.
+   - [] There should be a configuration option that accepts a json file to replay scenarios
+ - [X] The generator should return an "action" object that specifies what action should be done
+ - [] Support executing actions with different mecanisms than just Node's version of it. For example, using the command `mkdir` versus `md`. There should be an option to `useOsSpecificCommandsForActions`

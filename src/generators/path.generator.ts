@@ -12,12 +12,8 @@ export class PathGenerator {
   ) {
   }
 
-  generate(nestingLevels: number): string {
+  generate(elementType: ElementTypeEnum, nestingLevels: number): string[] {
     const pathParts: string[] = [];
-
-    const randomizedNumber = randomInt(0, 2);
-
-    const elementType: ElementTypeEnum = randomizedNumber === 0 ? ElementTypeEnum.Directory : ElementTypeEnum.File;
 
     for (let currentNestingLevel = 1; currentNestingLevel <= nestingLevels; currentNestingLevel++) {
       if(elementType === ElementTypeEnum.File && currentNestingLevel === nestingLevels) {
@@ -33,6 +29,6 @@ export class PathGenerator {
       }
     }
 
-    return "/" + pathParts.join("/");
+    return pathParts;
   }
 }
