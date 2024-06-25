@@ -22,6 +22,15 @@ export class ChangeAction {
    */
   destinationFilePath: string[];
 
+  constructor(object?: any) {
+    if(object) {
+      this.elementType = object.elementType;
+      this.changeType = object.changeType;
+      this.filePath = object.filePath;
+      this.destinationFilePath = object.destinationFilePath;
+    }
+  }
+
   toString() {
     return `[${this.elementType}] - [${this.changeType}] - /${this.filePath.join('/')}`;
   }

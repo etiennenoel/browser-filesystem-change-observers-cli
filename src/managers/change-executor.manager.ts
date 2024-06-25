@@ -4,7 +4,9 @@ import {ChangeAction} from '../actions/change.action';
 
 @injectable()
 export class ChangeExecutorManager {
-  constructor(@injectAll("ChangeExecutorInterface") private readonly changeExecutors: ChangeExecutorInterface[]) {
+  constructor(
+    @injectAll("ChangeExecutorInterface") private readonly changeExecutors: ChangeExecutorInterface[],
+  ) {
   }
 
   async isExecutable(baseDirectory: string, changeAction: ChangeAction): Promise<boolean> {

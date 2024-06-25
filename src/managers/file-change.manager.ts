@@ -4,6 +4,7 @@ import {ChangeActionGenerator} from '../generators/change-action.generator';
 import {RunCommandOptions} from '../command-options/run.command-options';
 import {ChangeExecutorManager} from './change-executor.manager';
 import {ChangeAction} from '../actions/change.action';
+import { ChangeActionReplayManager } from './change-action-replay.manager';
 
 @injectable()
 export class FileChangeManager {
@@ -27,6 +28,10 @@ export class FileChangeManager {
       }
 
       await this.changeExecutorManager.executeChange(options.rootDirectoryPath, changeAction);
+
+      if(options.saveReplayFile) {
+
+      }
 
       return changeAction;
     } while (true)

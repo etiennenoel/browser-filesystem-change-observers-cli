@@ -16,4 +16,14 @@ export class RunCommandOptions {
     @IsOptional()
     @IsNumber()
     stopAfterXIterations?: number;
+
+    @IsBoolean()
+    saveReplayFile: boolean = true;
+
+    @IsOptional()
+    @IsString()
+    replayFilePath: string;
+
+    @IsBoolean()
+    clearRootDirectoryPathOnReplay: boolean = false;
 }
