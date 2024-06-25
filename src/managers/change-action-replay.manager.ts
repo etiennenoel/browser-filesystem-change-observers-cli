@@ -29,7 +29,7 @@ export class ChangeActionReplayManager {
             mkdirSync(replayFilesFolder);
         }
 
-        this.fileTitle = path.join(replayFilesFolder, format(new Date(), "yyyy-MM-dd_hh:mm:ss") + ".json");
+        this.fileTitle = path.join(replayFilesFolder, format(new Date(), "yyyy-MM-dd_hh-mm-ss") + ".json");
 
         writeFileSync(this.fileTitle, JSON.stringify(fileReplay, null, 2), "utf-8");
     }
