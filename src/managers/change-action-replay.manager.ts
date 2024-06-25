@@ -5,6 +5,7 @@ import { DirectoryManager } from "@pristine-ts/file";
 import { PathManager } from "@pristine-ts/cli";
 import {mkdirSync, existsSync, writeFileSync, appendFileSync, readFileSync} from "fs";
 import { format } from "date-fns";
+import path from "path";
 
 @singleton()
 @injectable()
@@ -22,13 +23,13 @@ export class ChangeActionReplayManager {
         fileReplay.interval = options.interval;
         fileReplay.rootDirectoryPath = options.rootDirectoryPath;
 
-        const path = this.pathManager.getPathRelativeToCurrentExecutionDirectory("replay-files");
+        const replayFilesFolder = this.pathManager.getPathRelativeToCurrentExecutionDirectory("replay-files");
 
-        if(!existsSync(path)) {
-            mkdirSync(path);
+        if(!existsSync(replayFilesFolder)) {
+            mkdirSync(replayFilesFolder);
         }
 
-        this.fileTitle = `${path}/${format(new Date(), "yyyy-MM-dd_hh:mm:ss")}.json`;
+        this.fileTitle = path.join(replayFilesFolder, format(new Date(), "yyyy-MM-dd_hh:mm:ss") + ".json");
 
         writeFileSync(this.fileTitle, JSON.stringify(fileReplay, null, 2), "utf-8");
     }
