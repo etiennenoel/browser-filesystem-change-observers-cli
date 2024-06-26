@@ -70,7 +70,7 @@ export class RunCommand implements CommandInterface<RunCommandOptions> {
 
         changeActionsIndex++;
       } while(changeActionsIndex < fileReplay.changeActions.length)
-      
+
       return resolve(ExitCodeEnum.Success);
     }
   });
@@ -92,14 +92,14 @@ export class RunCommand implements CommandInterface<RunCommandOptions> {
       this.consoleManager.writeLine(`The directory path '${rootDirectoryPath}' doesn't exist. It will be created.`)
       mkdirSync(rootDirectoryPath, {
         recursive: true,
-      });      
+      });
     }
 
     if(args.replayFilePath) {
-      await this.consoleManager.writeLine(`Replaying file '${args.replayFilePath}'. Press 'ctrl-c' to exit.`)
+      this.consoleManager.writeLine(`Replaying file '${args.replayFilePath}'. Press 'ctrl-c' to exit.`)
 
       if(existsSync(args.replayFilePath) === false) {
-        await this.consoleManager.writeLine(`The replay file '${args.replayFilePath}' doesn't exist.`);
+        this.consoleManager.writeLine(`The replay file '${args.replayFilePath}' doesn't exist.`);
         return ExitCodeEnum.Error;
       }
 
@@ -107,17 +107,18 @@ export class RunCommand implements CommandInterface<RunCommandOptions> {
         if(args.rootDirectoryPath && args.rootDirectoryPath !== "/") {
           await this.shellManager.execute(`rm -rf ${args.rootDirectoryPath}/*`, {outputDuration: false,})
         }
-        
+
       } else {
         // Check if the replay directory is empty or not.
         if(readdirSync(args.rootDirectoryPath).length !== 0) {
-          await this.consoleManager.writeLine(`You are replaying and this directory '' isn't empty. Be careful, it might produce unexpected results. If you want to automatically clear it, pass this argument: '--clearRootDirectoryPathOnReplay=true' `)
+          this.consoleManager.writeLine(`You are replaying and this directory '' isn't empty. Be careful, it might produce unexpected results. If you want to automatically clear it, pass this argument: '--clearRootDirectoryPathOnReplay=true' `)
         }
       }
-      
+
+      this.consoleManager.writeLine(`The directory '${args.rootDirectoryPath}' is now ready to be observed.`)
       const fileReplay = JSON.parse(readFileSync(args.replayFilePath, "utf-8"));
 
-      return this.replayFile(fileReplay);      
+      return this.replayFile(fileReplay);
     }
 
     if(args.continuous) {
